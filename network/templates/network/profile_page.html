@@ -1,0 +1,75 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+    <div id="profile_page" class="container">
+      <h2>Profile Page</h2>
+
+          <strong>{{ user_profile.username }}</strong>
+          <br>
+          Followers: {{ user_followers }}
+          <br>
+          Following: {{ user_following }}
+          {% if user.is_authenticated %}
+            {% if followers %}
+               <form action="{% url 'unfollow' id=user_profile.pk %}" method="post">
+                  {% csrf_token %}
+                  <input id="unfollow" class="btn-top" type="submit" value="Unfollow">
+               </form>
+            {% else %}
+               <form action="{% url 'follow' id=user_profile.pk %}" method="post">
+                  {% csrf_token %}
+                  <input id="follow" class="btn-top" type="submit" value="Follow">
+               </form>
+            {% endif %}
+          {% endif %}
+
+          <br>
+          <h4>All Posts</h4>
+          {% for post in page_obj %}
+            <div class="container">
+              <strong>{{ post.users }}</strong>
+              <br>
+              {{ post.text }}
+              <br>
+              {{ post.posting_time }}
+              <br>
+              <div id="likes">{{ post.likes }} <i class="fas fa-heart"></i></div>
+            </div>
+          {% endfor %}
+
+          <div class="pagination">
+            <span class="step-links">
+              {% if page_obj.has_previous %}
+                  <a href="?page=1"> First</a>
+                  <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+              {% endif %}
+
+              <span class="current">
+                  Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+              </span>
+
+              {% if page_obj.has_next %}
+                  <a href="?page={{ page_obj.next_page_number }}">Next</a>
+                  <a href="?page={{ page_obj.paginator.num_pages }}">Last </a>
+              {% endif %}
+            </span>
+          </div>
+
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+
+        var user = '{{request.user}}';
+        console.log(`${user}`);
+        var user_profile = '{{user_profile.username}}';
+        console.log(`${user_profile}`);
+        if (user == user_profile) {
+            document.getElementById('follow').style.display = 'none';
+            document.getElementById('unfollow').style.display = 'none';
+        }
+      });
+    </script>
+{% endblock %}

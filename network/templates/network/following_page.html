@@ -1,0 +1,47 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+   <div id="all_posts" class="container">
+      <h2>All Posts</h2>
+      {% for post in page_obj %}
+          <div class="container">
+            <a href="{% url 'profile_page' id=post.users.pk %}">{{ post.users }}</a>
+            <br>
+            {{ post.text }}
+            <br>
+            {{ post.posting_time }}
+            <br>
+            <div id="likes">{{ post.likes }} <i class="fas fa-heart"></i></div>
+
+            {% if post.pk in liked_posts %}
+                <button id="unlike_{{post.pk}}" class="btn-top" onclick="unlike_post({{post.pk}})">Unlike</button>
+            {% else %}
+                <button id="like_{{post.pk}}" class="btn-top" onclick="like_post({{post.pk}})">Like</button>
+            {% endif %}
+          </div>
+      {% endfor %}
+
+       <div class="pagination">
+         <span class="step-links">
+            {% if page_obj.has_previous %}
+               <a href="?page=1"> First</a>
+               <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+            {% endif %}
+
+            <span class="current">
+               Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+               <a href="?page={{ page_obj.next_page_number }}">Next</a>
+               <a href="?page={{ page_obj.paginator.num_pages }}">Last </a>
+            {% endif %}
+         </span>
+       </div>
+   </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/index.js' %}"></script>
+{% endblock %}

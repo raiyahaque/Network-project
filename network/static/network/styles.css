@@ -1,0 +1,71 @@
+* {
+   font-family: "Josefin Sans", sans-serif;
+
+}
+.container {
+  padding: 30px;
+  border: 1px #bcc3c4;
+  margin: 10px;
+  border-style: solid;
+}
+.navbar-brand {
+   font-size: 25px;
+   color: #a6a4a1;
+}
+
+#likes i{
+   color: red;
+}
+a {
+  font-weight: bold;
+  font-size: 20px;
+  color: #8e999c;
+}
+
+a:hover{
+   color: #687275;
+}
+
+#id_post {
+  display: none;
+}
+
+#post_object {
+  display: none;
+}
+
+#new_post h2 {
+   color: #b7e0eb;
+   font-weight: bold;
+}
+
+#all_posts h2 {
+   color: #b7e0eb;
+   font-weight: bold;
+
+}
+
+#profile_page h2 {
+   color: #b7e0eb;
+   font-weight: bold;
+}
+
+#single_post {
+   margin-bottom: 1.5rem;
+}
+.btn-top {
+   width: 5rem;
+   border-radius: 3rem;
+   border: 0.1rem solid #b7e0eb;
+   background-color: #b7e0eb;
+   color: white;
+}
+
+.btn-top:hover {
+   background-color: #97c1cf;
+}
+
+#login, #register {
+   margin-left: 2rem;
+   margin-right: 2rem;
+}

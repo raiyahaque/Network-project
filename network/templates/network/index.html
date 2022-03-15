@@ -1,0 +1,78 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+
+{% block body %}
+<div id="new_post" class="container">
+   <h2>New Post</h2>
+   <form action="{% url 'new_post' %}" method="post">
+      {% csrf_token %}
+      <textarea id="text" name="text" rows="3" cols="100"></textarea>
+      <br>
+      <input class="btn-top" type="submit" value="Post">
+   </form>
+</div>
+
+
+<div id="all_posts" class="container">
+   <h2>All Posts</h2>
+   {% for post in page_obj %}
+   <div id="single_post" class="container">
+      <div id="id_post">{{ post.pk }}</div>
+      <a href="{% url 'profile_page' id=post.users.pk %}">{{ post.users }}</a>
+      <br>
+      {% if user.is_authenticated %}
+         {% if post.users == request.user %}
+            <button id="edit_element_{{post.pk}}" class="btn-top" onclick="edit_post({{post.pk}})">Edit</button>
+            <div id="post_text_{{post.pk}}"></div>
+            <div id="original_text_{{post.pk}}">{{ post.text }}</div>
+            {{ post.posting_time }}
+            <br>
+            <div id="likes">{{ post.likes }} <i class="fas fa-heart"></i></div>
+         {% else %}
+            {{ post.text }}
+            <br>
+            {{ post.posting_time }}
+            <br>
+            <div id="likes">{{ post.likes }} <i class="fas fa-heart"></i></div>
+         {% endif %}
+         {% if post.pk in liked_posts %}
+            <button id="unlike_{{post.pk}}" class="btn-top" onclick="unlike_post({{post.pk}})">Unlike</button>
+         {% else %}
+            <button id="like_{{post.pk}}" class="btn-top" onclick="like_post({{post.pk}})">Like</button>
+         {% endif %}
+      {% else %}
+         {{ post.text }}
+         <br>
+         {{ post.posting_time }}
+         <br>
+         <div id="likes">{{ post.likes }} <i class="fas fa-heart"></i></div>
+      {% endif %}
+
+
+   </div>
+   {% endfor %}
+
+   <div class="pagination">
+      <span class="step-links">
+         {% if page_obj.has_previous %}
+            <a href="?page=1"> First</a>
+            <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+         {% endif %}
+
+         <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+         </span>
+
+         {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">Last </a>
+         {% endif %}
+      </span>
+   </div>
+</div>
+{% endblock %}
+
+{% block script %}
+   <script src="{% static 'network/index.js' %}"></script>
+{% endblock %}
